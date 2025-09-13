@@ -84,36 +84,5 @@
     a.remove();
   });
 
-  downloadIcsBtn.addEventListener('click',function(){
-    const occurrences=12;
-    const last=new Date(lastWateredEl.value);
-    const intervalDays=Number(intervalDaysEl.value)||7;
-    const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PlantCareLocal//EN'];
-    for(let i=1;i<=occurrences;i++){
-      const ev=new Date(last.getTime() + i*intervalDays*24*60*60*1000);
-      const dt=ev.toISOString().slice(0,10).replace(/-/g,'');
-      const uid=`${plantNameEl.value.replace(/\s+/g,'')||'plant'}-${i}@local`;
-      const dtstamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-      lines.push(
-        'BEGIN:VEVENT',
-        'UID:'+uid,
-        'DTSTAMP:'+dtstamp,
-        'DTSTART;VALUE=DATE:'+dt,
-        'SUMMARY:Watering Reminder - '+plantNameEl.value,
-        'DESCRIPTION:'+descEl.value,
-        'END:VEVENT'
-      );
-    }
-    lines.push('END:VCALENDAR');
-    const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download=(plantNameEl.value||'plant')+'-watering.ics';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  });
-
 })();
+
